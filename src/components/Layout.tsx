@@ -16,12 +16,16 @@ const Layout = () => {
       <Sidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
 
       {/* Main Content Area */}
-      <div className={`flex-1 ${isSidebarCollapsed ? "ml-16" : "ml-64"} transition-all duration-300`}>
+      <div
+        className={`flex-1 transition-all duration-300 ${
+          isSidebarCollapsed ? "ml-20" : "ml-64"
+        }`}
+      >
         {/* Header */}
         <Header toggleSidebar={toggleSidebar} />
 
         {/* Main Content */}
-        <main className="p-8 mt-16">
+        <main className="p-8">
           <Outlet /> {/* This will render the current route's component */}
         </main>
       </div>

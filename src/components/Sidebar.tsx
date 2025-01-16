@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import {
-  Archive,
-  CircleDollarSign,
-  Clipboard,
-  Layout,
+  CircleChevronLeft,
+  CircleChevronRight,
+  CirclePercent,
+  CirclePercentIcon,
+  CircleUser,
+  GaugeCircle,
   LogOut, // Correctly imported as LogOut
   LucideIcon,
-  Menu,
+  LucideScanBarcode,
   SlidersHorizontal,
-  User,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom"; // Added useNavigate for logout
+import Swal from "sweetalert2";
 
 interface SidebarLinkProps {
   href: string;
@@ -51,52 +53,56 @@ const SidebarLink = ({
   );
 };
 
-const Sidebar = () => {
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const navigate = useNavigate(); // For handling logout
+interface SidebarProps {
+  isCollapsed: boolean;
+  toggleSidebar: () => void;
+}
 
-  const toggleSidebar = () => {
-    setIsSidebarCollapsed((prev) => !prev);
-  };
+const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
+  const navigate = useNavigate(); // For handling logout
 
   const handleLogout = () => {
     // Perform logout actions here (e.g., clear session, remove tokens, etc.)
-    alert("You have been logged out.");
-    navigate("/login"); // Redirect to the login page
+
+    Swal.fire({
+      title: "Выход",
+      text: "Вы действительно хотите выйти?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ffa230",
+      confirmButtonText: "Выйти",
+      cancelButtonText: "Отмена",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/login"); // Redirect to the login page
+      }
+    });
   };
 
-  const sidebarClassNames = `fixed flex flex-col ${
-    isSidebarCollapsed ? "w-0 md:w-16" : "w-72 md:w-64"
-  } bg-white transition-all duration-300 overflow-hidden h-full shadow-md z-40`;
-
   return (
-    <div className={sidebarClassNames}>
-      {/* TOP LOGO */}
+    <div
+      className={`fixed font-serif top-0 left-0 h-full bg-white shadow-lg transition-width duration-300 ${
+        isCollapsed ? "w-20" : "w-64"
+      }`}
+    >
       <div
         className={`flex gap-3 justify-between md:justify-normal items-center pt-8 ${
-          isSidebarCollapsed ? "px-5" : "px-8"
+          isCollapsed ? "px-5" : "px-8"
         }`}
       >
-        <img
-          src="/logo.png"
-          alt="edstock-logo"
-          width={27}
-          height={27}
-          className="rounded w-8"
-        />
         <h1
           className={`${
-            isSidebarCollapsed ? "hidden" : "block"
+            isCollapsed ? "hidden" : "block"
           } font-extrabold text-2xl`}
         >
-          OldMoney
+          Enrico Cerrini
         </h1>
-
-        <button
-          className="md:hidden px-3 py-3 bg-gray-100 rounded-full hover:bg-blue-100"
-          onClick={toggleSidebar}
-        >
-          <Menu className="w-4 h-4" />
+        <button onClick={toggleSidebar}>
+          {isCollapsed ? (
+            <CircleChevronRight className="w-10 h-10 text-orange-500" />
+          ) : (
+            <CircleChevronLeft className="w-10 h-10 text-orange-500" />
+          )}
         </button>
       </div>
 
@@ -104,48 +110,48 @@ const Sidebar = () => {
       <div className="flex-grow mt-8">
         <SidebarLink
           href="/"
-          icon={Layout}
-          label="Dashboard"
-          isCollapsed={isSidebarCollapsed}
+          icon={GaugeCircle}
+          label="Аналитика"
+          isCollapsed={isCollapsed}
         />
         <SidebarLink
           href="/sales"
-          icon={CircleDollarSign}
-          label="Sales"
-          isCollapsed={isSidebarCollapsed}
+          icon={CirclePercentIcon}
+          label="Продажи"
+          isCollapsed={isCollapsed}
         />
         <SidebarLink
           href="/inventory"
-          icon={Archive}
-          label="Inventory"
-          isCollapsed={isSidebarCollapsed}
+          icon={LucideScanBarcode}
+          label="Склад"
+          isCollapsed={isCollapsed}
         />
         <SidebarLink
           href="/employees"
-          icon={User}
-          label="Employees"
-          isCollapsed={isSidebarCollapsed}
+          icon={CircleUser}
+          label="Сотрудники"
+          isCollapsed={isCollapsed}
         />
         <SidebarLink
           href="/settings"
           icon={SlidersHorizontal}
-          label="Settings"
-          isCollapsed={isSidebarCollapsed}
+          label="Настройки"
+          isCollapsed={isCollapsed}
         />
       </div>
 
       {/* LOGOUT BUTTON */}
-      <div className={`${isSidebarCollapsed ? "px-5" : "px-8"} mb-10`}>
+      <div className={`${isCollapsed ? "px-5" : "px-8"} mb-10 mt-auto`}>
         <button
           onClick={handleLogout}
           className={`cursor-pointer flex items-center ${
-            isSidebarCollapsed ? "justify-center py-4" : "justify-start py-4"
+            isCollapsed ? "justify-center py-4" : "justify-start py-4"
           }
           hover:text-blue-500 hover:bg-blue-100 gap-3 transition-colors w-full`}
         >
           <LogOut className="w-6 h-6 !text-gray-700" />
-          {!isSidebarCollapsed && (
-            <span className="font-medium text-gray-700">Logout</span>
+          {!isCollapsed && (
+            <span className="font-medium text-gray-700">Выйти</span>
           )}
         </button>
       </div>

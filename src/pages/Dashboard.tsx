@@ -1,3 +1,4 @@
+import { ShoppingCart } from "lucide-react";
 import React from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
@@ -61,9 +62,12 @@ const Dashboard = () => {
 
       {/* Sales Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-gray-700">Daily Sales</h2>
-          <p className="text-2xl font-bold text-gray-900">${salesData.daily.toLocaleString()}</p>
+        <div className="bg-white p-6 rounded-lg shadow-md flex flex-row items-center space-x-4">
+          <ShoppingCart className="w-10 h-10 mb-4 text-orange-500 mr-2" />
+          <div>
+            <h2 className="text-lg font-semibold text-gray-700">Daily Sales</h2>
+            <p className="text-2xl font-bold text-gray-900">${salesData.daily.toLocaleString()}</p>
+          </div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold text-gray-700">Weekly Sales</h2>

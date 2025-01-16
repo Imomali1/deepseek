@@ -1,3 +1,4 @@
+import { SparklesIcon } from 'lucide-react';
 import React from 'react';
 
 const DashboardCards: React.FC = () => {

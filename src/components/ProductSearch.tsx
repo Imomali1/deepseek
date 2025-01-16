@@ -13,6 +13,7 @@ interface ProductSearchProps {
   onProductSelect: (product: Product) => void;
 }
 
+
 const ProductSearch = ({ products, onProductSelect }: ProductSearchProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<Product[]>([]);
@@ -30,22 +31,20 @@ const ProductSearch = ({ products, onProductSelect }: ProductSearchProps) => {
   };
 
   return (
-    <div className="bg-white border-brown-300 shadow-lg rounded-lg">
+    <div className="bg-white font-serif border-brown-300 shadow-lg rounded-lg">
       <div className="border-b border-brown-300 p-4">
-        <h2 className="text-2xl font-serif text-brown-800">Product Catalogue</h2>
+        <h2 className="text-2xl text-brown-800">Product Catalogue</h2>
       </div>
       <div className="p-6">
-        <div className="flex space-x-2">
-          <input
+        <div className="flex space-x-2 items-center">
+            <Search className="inline-block mr-2 text-orange-500" />
+            <input
             type="text"
             placeholder="Search for a product"
             value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
             className="flex-grow bg-white border-brown-300 text-brown-800 placeholder-brown-400 p-2 rounded"
           />
-          <button className="bg-brown-700 text-amber-100 hover:bg-brown-600 border-brown-500 p-2 rounded">
-            <Search className="h-4 w-4" />
-          </button>
         </div>
         {searchResults.length > 0 && (
           <ul className="mt-4 space-y-2">

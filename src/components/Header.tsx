@@ -1,11 +1,17 @@
+import { Percent } from 'lucide-react';
 import React from 'react';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  toggleSidebar: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
   return (
-    <header className="bg-white shadow">
+    <header className="bg-white shadow font-serif">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-xl font-semibold text-gray-700">Welcome, Admin</div>
+          <Percent className="w-6 h-6"/>
+          <div className="text-xl font-semibold text-gray-700">Касса</div>
           <div className="flex items-center">
             <button className="text-gray-500 hover:text-gray-700 focus:outline-none">
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

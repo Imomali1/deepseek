@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import CashDesk from "./CashDesk";
 import ProductSearch from "./ProductSearch";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, CircleX, ScanBarcode } from "lucide-react";
+import Swal from 'sweetalert2';
 
 // Mock data for products
 const products = [
@@ -28,8 +29,8 @@ interface Desk {
 
 const POSSystem = () => {
   const [cashDesks, setCashDesks] = useState<Desk[]>([
-    { id: 1, name: "Grand Hall", cart: [] },
-    { id: 2, name: "Parlour", cart: [] },
+    { id: 1, name: "Основной", cart: [] },
+    { id: 2, name: "Второй", cart: [] },
   ]);
   const [activeDeskId, setActiveDeskId] = useState<number>(1);
 
@@ -38,15 +39,15 @@ const POSSystem = () => {
       prevDesks.map((desk) =>
         desk.id === deskId
           ? {
-              ...desk,
-              cart: desk.cart.some((item) => item.id === product.id)
-                ? desk.cart.map((item) =>
-                    item.id === product.id
-                      ? { ...item, quantity: item.quantity + 1 }
-                      : item
-                  )
-                : [...desk.cart, { ...product, quantity: 1 }],
-            }
+            ...desk,
+            cart: desk.cart.some((item) => item.id === product.id)
+              ? desk.cart.map((item) =>
+                item.id === product.id
+                  ? { ...item, quantity: item.quantity + 1 }
+                  : item
+              )
+              : [...desk.cart, { ...product, quantity: 1 }],
+          }
           : desk
       )
     );
@@ -61,15 +62,15 @@ const POSSystem = () => {
       prevDesks.map((desk) =>
         desk.id === deskId
           ? {
-              ...desk,
-              cart: desk.cart
-                .map((item) =>
-                  item.id === productId
-                    ? { ...item, quantity: Math.max(0, quantity) }
-                    : item
-                )
-                .filter((item) => item.quantity > 0),
-            }
+            ...desk,
+            cart: desk.cart
+              .map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(0, quantity) }
+                  : item
+              )
+              .filter((item) => item.quantity > 0),
+          }
           : desk
       )
     );
@@ -80,9 +81,9 @@ const POSSystem = () => {
       prevDesks.map((desk) =>
         desk.id === deskId
           ? {
-              ...desk,
-              cart: desk.cart.filter((item) => item.id !== productId),
-            }
+            ...desk,
+            cart: desk.cart.filter((item) => item.id !== productId),
+          }
           : desk
       )
     );
@@ -101,38 +102,95 @@ const POSSystem = () => {
     const newId = Math.max(...cashDesks.map((desk) => desk.id)) + 1;
     setCashDesks([
       ...cashDesks,
-      { id: newId, name: `Salon ${newId}`, cart: [] },
+      { id: newId, name: `Вкладка ${newId}`, cart: [] },
     ]);
+    Swal.fire({
+      icon: 'success',
+      title: 'Desk Addd',
+      text: 'The desk has been successfully added.',
+      confirmButtonColor: '#3085d6',
+    });
     setActiveDeskId(newId);
   };
 
+
+  const removeDesk = (deskId: number) => {
+    if (cashDesks.length <= 1) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Cannot Delete',
+        text: 'You must have at least one desk.',
+        confirmButtonColor: '#3085d6',
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You are about to close this desk.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, close it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setCashDesks((prevDesks) => {
+          const updatedDesks = prevDesks.filter((desk) => desk.id !== deskId);
+          setActiveDeskId(updatedDesks[0].id);
+          return updatedDesks;
+        });
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Desk Closed',
+          text: 'The desk has been successfully closed.',
+          
+        });
+      }
+    });
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-serif font-bold mb-8 text-center text-brown-800 border-b-2 border-brown-300 pb-4">
-        Cash Desk Terminals
-      </h1>
-      <div>
-        <div className="flex justify-between items-center mb-8">
-          <div className="bg-brown-100 p-1 rounded-md">
+    <div className="container font-serif">
+        <div className="flex-row justify-between items-center">
+          <div className="flex flex-row bg-brown-100 p-1 rounded-md">
             {cashDesks.map((desk) => (
-              <button
-                key={desk.id}
-                onClick={() => setActiveDeskId(desk.id)}
-                className={`px-4 py-2 text-brown-800 rounded transition-colors duration-200 ${
-                  activeDeskId === desk.id ? "bg-brown-200" : ""
-                }`}
-              >
-                {desk.name}
-              </button>
+              <div className="flex items-center" key={desk.id}>
+                <button
+                  onClick={() => setActiveDeskId(desk.id)}
+                  className={`
+                    px-4 py-2 text-brown-800 rounded transition-colors duration-200
+                    bg-white
+                    border-2 border-brown-300
+                    ${activeDeskId === desk.id
+                      ? "bg-brown-200 font-bold shadow-md shadow-orange-200"
+                      : "hover:bg-brown-50"
+                    }`}
+                  style={{ cursor: "pointer" }}
+                >
+                  {desk.name}
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation(); 
+                      removeDesk(desk.id);
+                    }}
+                    className="ml-2 hover:text-red-600" 
+                  >
+                    <CircleX className="inline-block" />
+                  </span>
+                </button>
+              </div>
             ))}
-          </div>
-          <button
+             <button
             onClick={addNewDesk}
             className="bg-brown-700 text-amber-500 hover:bg-brown-800 border-brown-800 px-4 py-2 rounded"
           >
-            <PlusCircle className="inline-block mr-2" /> Add Salon
+            <PlusCircle className="inline-block mr-2" />
           </button>
+          </div>
         </div>
+        <div className="p-6 rounded-lg shadow-md">
         {cashDesks.map(
           (desk) =>
             desk.id === activeDeskId && (
@@ -143,13 +201,15 @@ const POSSystem = () => {
                 <div className="space-y-8">
                   <div className="bg-brown-50 p-6 rounded-lg shadow-lg">
                     <h2 className="text-2xl font-serif font-bold mb-4 text-brown-800">
-                      Barcode Scanner
+                      Сканер штрихкодов
                     </h2>
+                   <div className="flex flex-row">
+                    <ScanBarcode className="w-10 h-10 mb-4 text-orange-500 mr-2" />
                     <input
                       type="text"
-                      placeholder="Scan or enter barcode"
+                      placeholder="Сканировать или ввести штрихкод"
                       className="w-full mb-4 bg-white border-brown-300 text-brown-800 placeholder-brown-400 p-2 rounded"
-                      onKeyPress={(e) => {
+                      onKeyDown={(e) => {
                         if (e.key === "Enter") {
                           handleBarcodeScanned(
                             (e.target as HTMLInputElement).value
@@ -158,6 +218,7 @@ const POSSystem = () => {
                         }
                       }}
                     />
+                   </div>
                   </div>
                   <ProductSearch
                     products={products}
@@ -178,8 +239,8 @@ const POSSystem = () => {
               </div>
             )
         )}
+        </div>
       </div>
-    </div>
   );
 };
 
