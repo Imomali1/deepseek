@@ -13,6 +13,7 @@ import Inventory from "./pages/Inventory";
 import Logout from "./pages/Logout";
 import POSSystem from "./components/POSSystem";
 import Layout from "./components/Layout";
+import Products from "./pages/Products";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/sales" element={<POSSystem />} />
+          <Route path="/products" element={<Products/> } />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/employees" element={<Employees />} />
           <Route path="/settings" element={<Settings />} />
