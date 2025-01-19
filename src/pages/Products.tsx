@@ -1,6 +1,5 @@
 import { BsShop } from "react-icons/bs";
 import { GoCheck } from "react-icons/go";
-import SizeGenderSelector from "../components/Products/SizeGenderSelector";
 import GeneralInformation from "../components/Products/GeneralInformation";
 import ImageUploader from "../components/Products/ImageUploader";
 
