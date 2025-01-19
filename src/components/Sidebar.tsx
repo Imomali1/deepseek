@@ -81,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
 
   return (
     <div
-      className={`fixed font-serif top-0 left-0 h-full bg-white shadow-lg transition-width duration-300 ${
+      className={`fixed font-serif top-0 left-0 h-full bg-gray-100 transition-width duration-300 ${
         isCollapsed ? "w-20" : "w-64"
       }`}
     >
@@ -121,7 +121,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
           isCollapsed={isCollapsed}
         />
         <SidebarLink
-          href="/inventory"
+          href="/products"
           icon={LucideScanBarcode}
           label="Склад"
           isCollapsed={isCollapsed}

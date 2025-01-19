@@ -1,0 +1,42 @@
+export const MockProducts = [
+  {
+    id: 1,
+    name: "Product A",
+    category: "Electronics",
+    price: 299.99,
+    stock: 10,
+    barcode: "123456789012",
+  },
+  {
+    id: 2,
+    name: "Product B",
+    category: "Clothing",
+    price: 49.99,
+    stock: 5,
+    barcode: "987654321098",
+  },
+  {
+    id: 3,
+    name: "Product C",
+    category: "Electronics",
+    price: 199.99,
+    stock: 20,
+    barcode: "456789012345",
+  },
+  {
+    id: 4,
+    name: "Product D",
+    category: "Home",
+    price: 99.99,
+    stock: 15,
+    barcode: "321098765432",
+  },
+  {
+    id: 5,
+    name: "Product E",
+    category: "Clothing",
+    price: 29.99,
+    stock: 0,
+    barcode: "654321098765",
+  },
+];
