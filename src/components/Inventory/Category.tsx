@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 // Mock category data
 const mockCategories = Array.from({ length: 30 }, (_, i) => ({
   id: i + 1,
-  name: `Category ${i + 1}`,
+  name: `Turkum ${i + 1}`,
   productCount: Math.floor(Math.random() * 100) + 1,
 }));
 
@@ -56,9 +56,9 @@ const CategoriesTab: React.FC = () => {
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-gray-200">
-            <th className="border p-2">ID</th>
-            <th className="border p-2">Name</th>
-            <th className="border p-2">Product Count</th>
+            <th className="border p-2">№</th>
+            <th className="border p-2">Nomi</th>
+            <th className="border p-2">Miqdori</th>
           </tr>
         </thead>
         <tbody>

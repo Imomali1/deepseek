@@ -1,30 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import CategoriesTab from './Category';
 
-// Mock product data
-const mockProducts = Array.from({ length: 50 }, (_, i) => ({
-  id: i + 1,
-  name: `Product ${i + 1}`,
-  price: Math.floor(Math.random() * 100) + 1,
-  category: `Category ${Math.floor(i / 10) + 1}`,
-}));
+
 
 const ProductManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'products' | 'categories'>('products');
   const [searchTerm, setSearchTerm] = useState('');
   const [barcode, setBarcode] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [products, setProducts] = useState([]);
+  const [totalProducts, setTotalProducts] = useState(0);
   const productsPerPage = 10;
 
-  const filteredProducts = mockProducts.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    fetchProducts();
+  }, [currentPage, searchTerm]);
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('/api/products', {
+        params: {
+          page: currentPage,
+          limit: productsPerPage,
+          search: searchTerm,
+        },
+      });
+      setProducts(response.data.products);
+      setTotalProducts(response.data.total);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -94,18 +101,18 @@ const ProductManagement: React.FC = () => {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-200">
-                <th className="border p-2">ID</th>
-                <th className="border p-2">Name</th>
-                <th className="border p-2">Price</th>
-                <th className="border p-2">Category</th>
+                <th className="border p-2">№</th>
+                <th className="border p-2">Nomi</th>
+                <th className="border p-2">Narxi</th>
+                <th className="border p-2">Turkumi</th>
               </tr>
             </thead>
             <tbody>
-              {currentProducts.map((product) => (
+              {products.map((product, index) => (
                 <tr key={product.id}>
-                  <td className="border p-2">{product.id}</td>
+                  <td className="border p-2">{(currentPage - 1) * productsPerPage + index + 1}</td>
                   <td className="border p-2">{product.name}</td>
-                  <td className="border p-2">${product.price}</td>
+                  <td className="border p-2">{product.price}</td>
                   <td className="border p-2">{product.category}</td>
                 </tr>
               ))}
@@ -113,10 +120,10 @@ const ProductManagement: React.FC = () => {
           </table>
 
           <div className="mt-4 flex justify-center">
-            {Array.from({ length: Math.ceil(filteredProducts.length / productsPerPage) }, (_, i) => (
+            {Array.from({ length: Math.ceil(totalProducts / productsPerPage) }, (_, i) => (
               <button
                 key={i}
-                onClick={() => paginate(i + 1)}
+                onClick={() => setCurrentPage(i + 1)}
                 className={`mx-1 px-3 py-1 ${
                   currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'
                 }`}
@@ -134,4 +141,3 @@ const ProductManagement: React.FC = () => {
 };
 
 export default ProductManagement;
-

@@ -22,7 +22,7 @@ const Layout = () => {
         }`}
       >
         {/* Header */}
-        <Header toggleSidebar={toggleSidebar} />
+        {/* <Header toggleSidebar={toggleSidebar} /> */}
 
         {/* Main Content */}
         <main className="p-8">

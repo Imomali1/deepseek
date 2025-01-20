@@ -9,7 +9,7 @@ import Sales from "./pages/Sales";
 import Customers from "./pages/Customers";
 import Employees from "./pages/Employees";
 import Settings from "./pages/Settings";
-import ProductTable from "./components/NewInventory";
+import Inventory from "./pages/NewInventory";
 import Logout from "./pages/Logout";
 import POSSystem from "./components/POSSystem";
 import Layout from "./components/Layout";
@@ -32,7 +32,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/sales" element={<POSSystem />} />
           <Route path="/products" element={<Products/> } />
-          <Route path="/inventory" element={<ProductManagement />} />
+          <Route path="/inventory" element={<Inventory />} />
           <Route path="/employees" element={<Employees />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/logout" element={<Logout/>} />

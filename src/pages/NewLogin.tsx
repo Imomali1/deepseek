@@ -1,17 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPlay } from "react-icons/fa6";
-import axios from "axios";
-
-interface LoginRequest {
-  username: string;
-  password: string;
-}
-
-interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-}
+import { apiService } from "../api/axios";
 
 function NewLogin() {
   const [username, setUsername] = useState("");
@@ -21,25 +11,13 @@ function NewLogin() {
 
   const handleLogin = async () => {
     try {
-      const backendUrl = 'mock';
-      if (backendUrl === 'mock') {
-        console.log('Mock login successful!');
-        navigate('/');
-        return
-      }
-
       // Send login request with credentials
-      const response = await axios.post(
-        `${backendUrl}/login`,
-        { username, password },
-        { withCredentials: true } // Include cookies in the request
-      );
+      await apiService.postData(`/api/v1/users/login`, {
+        username: username,
+        password: password,
+      });
 
-      // Handle successful login
-      if (response.status === 200) {
-        console.log("Login successful!");
-        navigate("/"); // Redirect to the home page
-      }
+      window.location.href = '/dashboard';
     } catch (error) {
       console.error("Login error:", error);
     }
