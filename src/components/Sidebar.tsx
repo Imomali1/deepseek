@@ -127,6 +127,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
           isCollapsed={isCollapsed}
         />
         <SidebarLink
+          href="/inventory"
+          icon={LucideScanBarcode}
+          label="Склад 2"
+          isCollapsed={isCollapsed}
+        />
+        <SidebarLink
           href="/employees"
           icon={CircleUser}
           label="Сотрудники"
